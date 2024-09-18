@@ -8,7 +8,7 @@ function App() {
 
   const getWeather = (event) => {
     if (event.key === "Enter") {
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
         .then((response) => response.json())
         .then((data) => {
           setWeatherData(data);
@@ -16,6 +16,28 @@ function App() {
         .catch((error) => {
           console.error('Error fetching the weather data:', error);
         });
+    }
+  };
+
+  const getWeatherEmoji = (weather) => {
+    if (!weather) return "";
+    switch (weather) {
+      case 'Clear':
+        return '☀️';
+      case 'Clouds':
+        return '☁️'; 
+      case 'Rain':
+        return '🌧️'; 
+      case 'Snow':
+        return '❄️'; 
+      case 'Thunderstorm':
+        return '⛈️'; 
+      case 'Drizzle':
+        return '🌦️'; 
+      case 'Smoke':
+        return '🌫️'; 
+      default:
+        return '🌍'; 
     }
   };
 
@@ -36,7 +58,8 @@ function App() {
       ) : (
         <div className='weather-data'>
           <p className='city'>{weatherData.name}</p>
-          <p className='temp'>{Math.round(weatherData.main.temp)} ºF</p>
+          <p className='emoji'>{getWeatherEmoji(weatherData.weather[0].main)}</p>
+          <p className='temp'>{Math.round(weatherData.main.temp)}<span className='celsius'>ºC</span></p>
           <p className='weather'>{weatherData.weather[0].main}</p>
         </div>
       )}
